@@ -11,12 +11,14 @@ def create_app() -> Flask:
         # from app.models import Categoria, Ingrediente
         from app.models.categoria import Categoria
         from app.models.ingrediente import Ingrediente
-        print("ANTES:")
-        print(db.metadata.tables.keys())
+        from app.models.receta import Receta
+        from app.models.receta_ingrediente import RecetaIngrediente
+
         db.create_all()
-        print("DESPUÉS:")
-        print(db.metadata.tables.keys())
+
         from app.views import CategoriaView, IngredienteView
+        from app.views.receta_view import RecetaModelView
+        from app.views.reportes import ReporteSimpleView
         appbuilder.add_view(
                 CategoriaView, 
                 "Categorías", 
@@ -28,4 +30,16 @@ def create_app() -> Flask:
             "Ingredientes", 
             icon="fa-lemon-o", 
             category="Recetas")
+        
+        appbuilder.add_view(
+            RecetaModelView, 
+            "Recetas", 
+            icon="fa-lemon-o", 
+            category="Recetas")
+        
+        appbuilder.add_view(
+            ReporteSimpleView, 
+            "Reportes de recetas por categoria", 
+            icon="fa-lemon-o", 
+            category="Reportes")
     return app
