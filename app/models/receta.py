@@ -14,7 +14,8 @@ class Receta(db.Model):
     categoria = relationship("Categoria", backref="recetas")
     # relacion muchos a muchos
     
-    ingredientes = relationship("RecetaIngrediente", back_populates="receta", cascade="all")
+    #ingredientes = relationship("RecetaIngrediente", back_populates="receta", cascade="all")
+    ingredientes = relationship("RecetaIngrediente", back_populates="receta", cascade="all, delete-orphan")
     
     def __repr__(self):
         return self.nombre

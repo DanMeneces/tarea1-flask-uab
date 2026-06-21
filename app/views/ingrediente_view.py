@@ -5,5 +5,5 @@ from app.models.ingrediente import Ingrediente
 class IngredienteView(ModelView):
     datamodel = SQLAInterface(Ingrediente)
     list_columns = ['nombre', 'unidad_medida']
-    add_columns = ['nombre', 'unidad_medida']
-    edit_columns = ['nombre', 'unidad_medida']
+    add_columns = ['nombre','unidad_medida']
+    edit_columns = ['nombre','unidad_medida']

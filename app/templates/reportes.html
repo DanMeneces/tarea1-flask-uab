@@ -1,103 +1,73 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Categorías</title>
-
-    <!-- Bootstrap 5 -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body class="bg-light">
-
-<div class="container py-5">
-
+{% extends "appbuilder/base.html" %}
+{% block content %}
+<div class="container py-4">
     <div class="row justify-content-center">
-        <div class="col-md-6">
-
-            <div class="card shadow-lg border-0">
-
+        <div class="col-md-8">
+            <div class="card shadow border-0">
                 <div class="card-header bg-primary text-white">
-                    <h4 class="mb-0">📂 Categorías</h4>
+                    <h4 class="mb-0">Reporte de Recetas por Categoría</h4>
                 </div>
-
                 <div class="card-body">
 
                     <form method="POST">
-
                         <div class="mb-3">
-                            <label class="form-label fw-bold">
-                                Seleccione una categoría
-                            </label>
-
-                            <select class="form-select" name="cat_id" required>
-
+                            <label class="form-label fw-bold">Seleccione una categoría</label>
+                            <select class="form-select" name="cat_id" onchange="this.form.submit()" required>
                                 <option value="">--- Seleccionar ---</option>
-
                                 {% for cat in categorias %}
-                                <option value="{{ cat.id }}"
-                                    {% if  seleccionado == cat.id|string %}
-                                        selected
-                                    {% endif %}
-                                >
+                                <option value="{{ cat.id }}" {% if id_seleccionado == cat.id|string %}selected{% endif %}>
                                     {{ cat.nombre }}
                                 </option>
                                 {% endfor %}
-
                             </select>
                         </div>
-
-                        <div class="d-grid">
-                            <button class="btn btn-primary" type="submit">
-                                Ver información
-                            </button>
-                        </div>
-
                     </form>
 
-                    <!-- {% if categoria_seleccionada %} -->
+                    {% if categoria_seleccionada %}
+                    <hr class="my-4">
+                    <div class="alert alert-light border shadow-sm">
+                        <h5 class="text-primary fw-bold mb-3">
+                            Recetas en la categoría: <span class="text-dark">{{ categoria_seleccionada.nombre }}</span>
+                        </h5>
 
-                    <hr>
-
-                    <div class="alert alert-info">
-
-                        <h5 class="mb-3">Información de la categoría</h5>
-
-                        <p class="mb-0">
-                            {{ seleccionado }}
-                        </p>
-
+                        {% if categoria_seleccionada.recetas %}
+                            <div class="list-group">
+                            {% for receta in categoria_seleccionada.recetas %}
+                                <div class="list-group-item list-group-item-action p-3">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-1 fw-bold text-success">{{ receta.nombre }}</h6>
+                                    </div>
+                                    <p class="mb-1 text-muted small">{{ receta.descripcion or 'Sin descripción disponible.' }}</p>
+                                    <small class="text-secondary"><strong>Instrucciones:</strong> {{ receta.instrucciones }}</small>
+                                </div>
+                            {% endfor %}
+                            </div>
+                        {% else %}
+                            <p class="text-danger mb-0 small">No hay ninguna receta registrada en esta categoría todavía.</p>
+                        {% endif %}
                     </div>
 
-                    <!-- {% endif %} -->
+                    <hr class="my-4">
+                    <div class="alert alert-light border shadow-sm">
+                        <h5 class="text-primary fw-bold mb-3">Ingredientes utilizados</h5>
+
+                        {% if ingredientes %}
+                            <ul class="list-group">
+                            {% for ing in ingredientes %}
+                                <li class="list-group-item">
+                                    {{ ing.nombre }} <span class="text-muted">({{ ing.unidad_medida }})</span>
+                                </li>
+                            {% endfor %}
+                            </ul>
+                        {% else %}
+                            <p class="text-danger mb-0 small">No hay ingredientes registrados en esta categoría.</p>
+                        {% endif %}
+                    </div>
+                    {% endif %}
 
                 </div>
-
             </div>
-
         </div>
     </div>
-
 </div>
-
-</body>
-</html>
-<!-- <div>
-    <h2>Categorias</h2>
-    <form method="POST" action="">
-        <label>Seleccione una categoria:</label>
-        <select  name="cat_id" >
-            <option>-----Seleccionar----</option>
-            {% for cat in  categorias%}
-                <option value="{{ cat.id }}" >
-                    {{ cat.nombre }}
-                </option>
-            {% endfor %}
-
-
-        </select>
-        <button type="submit"> Ver los datos de la categoria </button>
-    </form>
-    <div>
-        <strong>Id de la categoria</strong>
-    </div>
-</div> -->
+{% endblock %}
